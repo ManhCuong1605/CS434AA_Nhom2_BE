@@ -8,6 +8,6 @@ router.put("/duyet-lich/:id", verifyToken, checkRole(["ADMIN", "KHACHHANG"]), li
 router.put("/huy-lich/:id", lichHenController.huyLichHen);
 
 router.get("/nhanvien/:id", verifyToken, checkRole(["NHANVIEN"]), lichHenController.getLichHenNhanVien);
-router.get("/", verifyToken, checkRole(["ADMIN"]), lichHenController.getAllLichHen);
+
 module.exports = router;
 

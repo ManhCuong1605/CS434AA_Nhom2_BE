@@ -15,7 +15,7 @@ const doiMatKhauUserRoutes = require("./routes/DoiMatKhauUserRoutes");
 const datLichHenRoutes = require("./routes/DatLichHenRoutes");
 const batDongSanNoiBatRoutes = require("./routes/BatDongSanNoiBatRoutes");
 const profileRoutes = require("./routes/ProfileRoutes");
-const cors = require("cors");
+
 
 require("./models/quanhe");
 
