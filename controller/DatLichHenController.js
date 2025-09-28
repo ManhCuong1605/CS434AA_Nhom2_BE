@@ -80,18 +80,7 @@ exports.duyetLichHen = async (req, res) => {
             ]
         }); if (!lichHen) return res.status(404).json({ message: "Không tìm thấy lịch hẹn" });
 
-        const trungLich = await LichHen.findOne({
-            where: {
-                NhanVien_id: nhanVienId,
-                NgayHen: lichHen.NgayHen,
-                TrangThai: 1
-            }
-        });
-
-        if (trungLich) {
-            return res.status(400).json({ message: "Nhân viên này đã có lịch vào thời gian đó" });
-        }
-
+    
         lichHen.NhanVien_id = nhanVienId;
         lichHen.TrangThai = 1;
         await lichHen.save();
