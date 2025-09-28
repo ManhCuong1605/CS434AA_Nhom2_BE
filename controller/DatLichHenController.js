@@ -1,5 +1,5 @@
-const { LichHen, KhachHang, NhanVien, User, NhaDat, HinhAnhNhaDat } = require("../models/quanhe");
-const { sendEmail, getEmailHtmlDuyet, getEmailHtmlHuy } = require("../config/mail");
+ const { LichHen, KhachHang, NhanVien, User, NhaDat, HinhAnhNhaDat } = require(../models/quanhe);
+const { sendEmail, getEmailHtmlDuyet, getEmailHtmlHuy } = require(../config/mail);
 const { formatDateTime } = require('../utils/formatDateTime');
 
 // Đặt lịch hẹn
@@ -8,12 +8,10 @@ exports.datLichHen = async (req, res) => {
         const { nhaDatId, NgayHen } = req.body;
         const khachHang = await KhachHang.findOne({ where: { User_id: req.user.id } });
 
-        if (!khachHang) {
-            return res.status(400).json({ message: "Khách hàng không tồn tại" });
+            return res.status(400).json({ message: Khách hàng không tồn tại });
         }
 
-        if (!nhaDatId || !NgayHen) {
-            return res.status(400).json({ message: "Thiếu thông tin cần thiết để đặt lịch" });
+            return res.status(400).json({ message: Thiếu thông tin cần thiết để đặt lịch });
         }
 
         const lichHen = await LichHen.create({
@@ -24,7 +22,7 @@ exports.datLichHen = async (req, res) => {
             TrangThai: 0
         });
 
-        return res.status(201).json({ message: "Đặt lịch hẹn thành công, vui lòng chờ duyệt", lichHen });
+        return res.status(201).json({ message: Đặt lịch hẹn thành công, vui lòng chờ duyệt, lichHen });
 
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -44,12 +42,11 @@ exports.duyetLichHen = async (req, res) => {
                     include: [
                         {
                             model: User,
-                            attributes: ["HoTen", "email"]
+                            attributes: [HoTen, email]
                         }
                     ]
                 }
             ]
-        }); if (!lichHen) return res.status(404).json({ message: "Không tìm thấy lịch hẹn" });
 
         const trungLich = await LichHen.findOne({
             where: {
@@ -60,7 +57,7 @@ exports.duyetLichHen = async (req, res) => {
         });
 
         if (trungLich) {
-            return res.status(400).json({ message: "Nhân viên này đã có lịch vào thời gian đó" });
+            return res.status(400).json({ message: Nhân viên này đã có lịch vào thời gian đó });
         }
 
         lichHen.NhanVien_id = nhanVienId;
@@ -70,7 +67,7 @@ exports.duyetLichHen = async (req, res) => {
         if (lichHen.KhachHang?.User?.email) {
             await sendEmail(
                 lichHen.KhachHang.User.email,
-                "🎉 Lịch hẹn của bạn đã được duyệt - BlackS City",
+                🎉 Lịch hẹn của bạn đã được duyệt - BlackS City,
                 getEmailHtmlDuyet(
                     lichHen.KhachHang.User.HoTen,
                     formatDateTime(lichHen.NgayHen),
@@ -79,7 +76,7 @@ exports.duyetLichHen = async (req, res) => {
             );
         }
 
-        return res.json({ message: "Duyệt lịch thành công", lichHen });
+        return res.json({ message: Duyệt lịch thành công, lichHen });
 
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -98,15 +95,14 @@ exports.huyLichHen = async (req, res) => {
                     include: [
                         {
                             model: User,
-                            attributes: ["HoTen", "email"]
+                            attributes: [HoTen, email]
                         }
                     ]
                 }
             ]
         });
 
-        if (!lichHen) return res.status(404).json({ message: "Không tìm thấy lịch hẹn" });
-        if (lichHen.TrangThai === 2) return res.status(400).json({ message: "Lịch hẹn này đã bị hủy trước đó" });
+        if (lichHen.TrangThai === 2) return res.status(400).json({ message: Lịch hẹn này đã bị hủy trước đó });
 
         lichHen.TrangThai = 2;
         await lichHen.save();
@@ -116,15 +112,15 @@ exports.huyLichHen = async (req, res) => {
             try {
                 await sendEmail(
                     lichHen.KhachHang.User.email,
-                    "❌ Lịch hẹn của bạn đã bị hủy - BlackS City",
+                    ❌ Lịch hẹn của bạn đã bị hủy - BlackS City,
                     getEmailHtmlHuy(lichHen.KhachHang.User.HoTen, formatDateTime(lichHen.NgayHen))
                 );
             } catch (err) {
-                console.error("Gửi email thất bại:", err.message);
+                console.error(Gửi email thất bại:, err.message);
             }
         }
 
-        return res.json({ message: "Hủy lịch hẹn thành công", lichHen });
+        return res.json({ message: Hủy lịch hẹn thành công, lichHen });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -140,7 +136,7 @@ exports.getAllLichHen = async (req, res) => {
                     include: [
                         {
                             model: User,
-                            attributes: ["HoTen"],
+                            attributes: [HoTen],
                         }
                     ]
                 },
@@ -149,7 +145,7 @@ exports.getAllLichHen = async (req, res) => {
                     include: [
                         {
                             model: User,
-                            attributes: ["HoTen", "SoDienThoai"],
+                            attributes: [HoTen, SoDienThoai],
                         }
                     ]
                 }
@@ -170,23 +166,19 @@ exports.getLichHenNhanVien = async (req, res) => {
             include: [
                 {
                     model: KhachHang,
-                    include: [{ model: User, attributes: ["HoTen", "SoDienThoai"] }]
+                    include: [{ model: User, attributes: [HoTen, SoDienThoai] }]
                 },
                 {
                     model: NhaDat,
-                    attributes: ["TenNhaDat", "ThanhPho", "Quan", "Phuong", "Duong", "SoNha", "GiaBan", "DienTich", "Huong"],
+                    attributes: [TenNhaDat, ThanhPho, Quan, Phuong, Duong, SoNha, GiaBan, DienTich, Huong],
                     include: [
                         {
                             model: HinhAnhNhaDat,
-                            as: "hinhAnh",
-                            attributes: ["url"]
+                            as: hinhAnh,
+                            attributes: [url]
                         }
                     ]
                 }
             ]
         });
-        return res.json(lichHens);
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-};
+       }
