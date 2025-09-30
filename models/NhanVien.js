@@ -12,6 +12,11 @@ const NhanVien = sequelize.define("NhanVien", {
         allowNull: false,
     },
 
+
+
+
+
+    
     NgayLamViec: {
         type: DataTypes.DATE,
     },
